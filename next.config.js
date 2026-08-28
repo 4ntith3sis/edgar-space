@@ -1,10 +1,20 @@
 /** @type {import('next').NextConfig} */
+const isProduction = process.env.NODE_ENV === 'production' || Boolean(process.env.VERCEL);
+
 const nextConfig = {
   reactStrictMode: true,
   images: {
     unoptimized: true,
   },
   async rewrites() {
+    if (isProduction) {
+      return [
+        {
+          source: '/koleksi',
+          destination: '/produk',
+        },
+      ];
+    }
     return [
       {
         source: '/koleksi',

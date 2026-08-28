@@ -8,9 +8,15 @@ const API_BASE_URL =
  * @param {RequestInit} [options={}]
  */
 export async function fetchApi(endpoint, options = {}) {
-  const url = endpoint.startsWith('http')
-    ? endpoint
-    : `${API_BASE_URL}${endpoint}`;
+  const cleanEndpoint = endpoint.startsWith('/') ? endpoint : `/${endpoint}`;
+  let url;
+  if (endpoint.startsWith('http')) {
+    url = endpoint;
+  } else if (typeof window !== 'undefined') {
+    url = `/api${cleanEndpoint}`;
+  } else {
+    url = `${API_BASE_URL}${cleanEndpoint}`;
+  }
 
   const headers = {
     ...(options.headers || {})
