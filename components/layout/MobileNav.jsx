@@ -31,8 +31,8 @@ export default function MobileNav({ isOpen, onClose }) {
         aria-hidden="true"
       />
 
-      {/* Drawer */}
-      <div className="fixed inset-y-0 right-0 z-50 w-full max-w-xs bg-warm-ivory p-5 shadow-2xl flex flex-col justify-between border-l border-light-beige animate-in slide-in-from-right duration-300">
+      {/* Drawer — slides in from the left */}
+      <div className="fixed inset-y-0 left-0 z-50 w-full max-w-xs bg-warm-ivory p-5 shadow-2xl flex flex-col justify-between border-r border-light-beige animate-in slide-in-from-left duration-300">
         <div>
           <div className="flex items-center justify-between pb-4 border-b border-light-beige">
             <span className="font-serif text-xl tracking-wider text-charcoal font-normal">
