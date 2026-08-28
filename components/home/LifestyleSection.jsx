@@ -4,7 +4,7 @@ import Container from '@/components/ui/Container';
 
 export default function LifestyleSection() {
   return (
-    <section className="bg-soft-beige py-16 sm:py-24 border-t border-b border-light-taupe">
+    <section className="bg-soft-beige py-10 sm:py-16 lg:py-24 border-t border-b border-light-taupe">
       <Container>
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
           {/* Large Image Column */}

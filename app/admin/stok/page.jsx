@@ -140,7 +140,8 @@ export default function AdminStockPage() {
             </div>
           ) : (
             <div className="bg-white rounded-2xl border border-light-beige shadow-xs overflow-hidden">
-              <table className="w-full text-left text-xs font-sans">
+              <div className="overflow-x-auto">
+              <table className="w-full text-left text-xs font-sans min-w-[600px]">
                 <thead className="bg-soft-beige/50 text-warm-gray uppercase text-[10px] tracking-wider border-b border-light-beige">
                   <tr>
                     <th className="py-3.5 px-4">Produk</th>
@@ -200,6 +201,7 @@ export default function AdminStockPage() {
                   })}
                 </tbody>
               </table>
+              </div>
             </div>
           )}
         </>
@@ -211,7 +213,8 @@ export default function AdminStockPage() {
               Belum ada riwayat mutasi stok.
             </div>
           ) : (
-            <table className="w-full text-left text-xs font-sans">
+            <div className="overflow-x-auto">
+            <table className="w-full text-left text-xs font-sans min-w-[700px]">
               <thead className="bg-soft-beige/50 text-warm-gray uppercase text-[10px] tracking-wider border-b border-light-beige">
                 <tr>
                   <th className="py-3.5 px-4">Waktu</th>
@@ -266,6 +269,7 @@ export default function AdminStockPage() {
                 ))}
               </tbody>
             </table>
+            </div>
           )}
         </div>
       )}

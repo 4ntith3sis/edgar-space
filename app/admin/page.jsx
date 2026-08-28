@@ -208,7 +208,7 @@ export default function AdminDashboardPage() {
           </div>
         ) : (
           <div className="overflow-x-auto">
-            <table className="w-full text-left text-xs font-sans">
+            <table className="w-full text-left text-xs font-sans min-w-[600px]">
               <thead className="bg-soft-beige/50 text-warm-gray uppercase text-[10px] tracking-wider border-y border-light-beige">
                 <tr>
                   <th className="py-3 px-4">Produk</th>
