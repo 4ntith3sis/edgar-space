@@ -21,9 +21,9 @@ export default function WhyEdgarSpace() {
   ];
 
   return (
-    <section aria-label="Keunggulan Edgar Space" className="bg-warm-ivory py-20 sm:py-28">
+    <section aria-label="Keunggulan Edgar Space" className="bg-warm-ivory py-12 sm:py-20 lg:py-28">
       <Container>
-        <div className="text-center max-w-2xl mx-auto mb-16 sm:mb-20">
+        <div className="text-center max-w-2xl mx-auto mb-8 sm:mb-16 lg:mb-20">
           <span className="text-xs font-sans font-semibold tracking-widest text-deep-olive uppercase block mb-3">
             Nilai Pembeda
           </span>
@@ -37,7 +37,7 @@ export default function WhyEdgarSpace() {
           {benefits.map((item, index) => (
             <div
               key={index}
-              className="bg-white/60 p-8 sm:p-10 rounded-2xl border border-light-beige flex flex-col justify-between transition-all duration-300 hover:bg-white hover:shadow-subtle hover:border-deep-olive/30"
+              className="bg-white/60 p-5 sm:p-8 lg:p-10 rounded-2xl border border-light-beige flex flex-col justify-between transition-all duration-300 hover:bg-white hover:shadow-subtle hover:border-deep-olive/30"
             >
               <div>
                 <div className="flex items-center justify-between mb-8">

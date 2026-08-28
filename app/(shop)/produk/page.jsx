@@ -8,7 +8,7 @@ import Container from '@/components/ui/Container';
 import ProductCard from '@/components/product/ProductCard';
 import ProductCardSkeleton from '@/components/product/ProductCardSkeleton';
 import { fetchApi, getImageUrl } from '@/libs/api';
-import { Package, RotateCcw, AlertCircle, Search, FolderTree, ChevronRight } from 'lucide-react';
+import { Package, RotateCcw, AlertCircle, Search, FolderTree, ChevronRight, SlidersHorizontal, X } from 'lucide-react';
 
 function CatalogContent() {
   const router = useRouter();
@@ -27,6 +27,7 @@ function CatalogContent() {
   const [searchQueryText, setSearchQueryText] = useState(searchQuery);
   const [activeSearch, setActiveSearch] = useState(searchQuery);
   const [currentPageNum, setCurrentPageNum] = useState(currentPage);
+  const [mobileFilterOpen, setMobileFilterOpen] = useState(false);
 
   const [products, setProducts] = useState([]);
   const [categories, setCategories] = useState([]);
@@ -212,11 +213,113 @@ function CatalogContent() {
             </div>
           )}
 
+          {/* Mobile Filter Toggle Button */}
+          <div className="flex items-center justify-between lg:hidden">
+            <button
+              type="button"
+              onClick={() => setMobileFilterOpen(true)}
+              className="flex items-center space-x-2 px-4 py-2.5 bg-white border border-light-beige rounded-xl text-xs font-semibold text-charcoal shadow-xs hover:border-deep-olive transition-colors"
+            >
+              <SlidersHorizontal className="w-4 h-4 text-deep-olive" />
+              <span>Filter & Kategori</span>
+              {(selectedCategory || activeSearch || selectedSort !== 'newest') && (
+                <span className="w-2 h-2 rounded-full bg-terracotta" />
+              )}
+            </button>
+            <div className="flex items-center space-x-2">
+              <label className="text-xs text-warm-gray">Urutkan:</label>
+              <select
+                value={selectedSort}
+                onChange={(e) => handleSelectSort(e.target.value)}
+                className="px-2.5 py-1.5 rounded-lg border border-light-beige bg-white text-charcoal text-xs font-medium focus:outline-none cursor-pointer"
+              >
+                <option value="newest">Terbaru</option>
+                <option value="name-asc">Nama A-Z</option>
+                <option value="price-asc">Harga Terendah</option>
+                <option value="price-desc">Harga Tertinggi</option>
+              </select>
+            </div>
+          </div>
+
+          {/* Mobile Filter Drawer */}
+          {mobileFilterOpen && (
+            <div className="fixed inset-0 z-50 lg:hidden">
+              <div className="fixed inset-0 bg-charcoal/50 backdrop-blur-xs" onClick={() => setMobileFilterOpen(false)} />
+              <div className="fixed inset-y-0 left-0 z-50 w-full max-w-xs bg-white shadow-2xl flex flex-col animate-in slide-in-from-left duration-300">
+                <div className="flex items-center justify-between px-5 py-4 border-b border-light-beige">
+                  <h3 className="font-sans font-bold text-sm text-charcoal">Filter Produk</h3>
+                  <button onClick={() => setMobileFilterOpen(false)} className="p-2 rounded-full hover:bg-soft-beige text-warm-gray">
+                    <X className="w-5 h-5" />
+                  </button>
+                </div>
+                <div className="flex-1 overflow-y-auto p-5 space-y-6">
+                  {/* Mobile Search */}
+                  <div className="space-y-2">
+                    <h4 className="text-xs font-semibold uppercase tracking-wider text-charcoal flex items-center space-x-1.5">
+                      <Search className="w-3.5 h-3.5 text-deep-olive" />
+                      <span>Cari Produk</span>
+                    </h4>
+                    <form onSubmit={(e) => { handleSearchFormSubmit(e); setMobileFilterOpen(false); }} className="relative">
+                      <input
+                        type="text"
+                        value={searchQueryText}
+                        onChange={(e) => setSearchQueryText(e.target.value)}
+                        placeholder="Cari nama produk..."
+                        className="w-full pl-9 pr-3 py-2 rounded-xl border border-light-beige bg-warm-ivory/30 text-charcoal text-xs focus:outline-none focus:border-deep-olive"
+                      />
+                      <button type="submit" className="absolute left-3 top-2.5 text-warm-gray hover:text-charcoal">
+                        <Search className="w-3.5 h-3.5" />
+                      </button>
+                    </form>
+                  </div>
+
+                  {/* Mobile Category List */}
+                  <div className="space-y-2">
+                    <div className="flex items-center justify-between">
+                      <h4 className="text-xs font-semibold uppercase tracking-wider text-charcoal flex items-center space-x-1.5">
+                        <FolderTree className="w-3.5 h-3.5 text-deep-olive" />
+                        <span>Kategori</span>
+                      </h4>
+                      {selectedCategory && (
+                        <button onClick={() => { handleSelectCategory(''); }} className="text-[11px] font-semibold text-terracotta hover:underline">Reset</button>
+                      )}
+                    </div>
+                    <nav className="space-y-1">
+                      <button type="button" onClick={() => { handleSelectCategory(''); setMobileFilterOpen(false); }}
+                        className={`w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl text-xs font-medium transition-all ${!selectedCategory ? 'bg-deep-olive text-white shadow-xs font-semibold' : 'text-charcoal hover:bg-warm-ivory'}`}>
+                        <span>Semua Kategori</span>
+                        <ChevronRight className={`w-3.5 h-3.5 ${!selectedCategory ? 'text-white' : 'opacity-40'}`} />
+                      </button>
+                      {categories.map((cat) => {
+                        const isSelected = selectedCategory === cat.slug;
+                        return (
+                          <button key={cat.id} type="button" onClick={() => { handleSelectCategory(cat.slug); setMobileFilterOpen(false); }}
+                            className={`w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl text-xs font-medium transition-all ${isSelected ? 'bg-deep-olive text-white shadow-xs font-semibold' : 'text-charcoal hover:bg-warm-ivory'}`}>
+                            <span className="truncate max-w-[170px] text-left">{cat.name}</span>
+                            <ChevronRight className={`w-3.5 h-3.5 shrink-0 ${isSelected ? 'text-white' : 'opacity-40'}`} />
+                          </button>
+                        );
+                      })}
+                    </nav>
+                  </div>
+
+                  {(activeSearch || selectedCategory || selectedSort !== 'newest') && (
+                    <button type="button" onClick={() => { handleResetFilters(); setMobileFilterOpen(false); }}
+                      className="w-full py-2.5 px-3 rounded-xl border border-terracotta/30 text-terracotta hover:bg-terracotta/10 text-xs font-semibold flex items-center justify-center space-x-1.5">
+                      <RotateCcw className="w-3.5 h-3.5" />
+                      <span>Hapus Semua Filter</span>
+                    </button>
+                  )}
+                </div>
+              </div>
+            </div>
+          )}
+
           {/* Main 2-Column Layout (Left Sidebar + Right Product Grid) */}
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
             
-            {/* LEFT COLUMN: Category Sidebar */}
-            <aside className="lg:col-span-3 space-y-6">
+            {/* LEFT COLUMN: Category Sidebar — hidden on mobile, uses drawer instead */}
+            <aside className="hidden lg:block lg:col-span-3 space-y-6">
               <div className="bg-white p-6 rounded-3xl border border-light-beige shadow-xs space-y-6">
                 
                 {/* Search Bar Input */}
@@ -312,7 +415,7 @@ function CatalogContent() {
             <main className="lg:col-span-9 space-y-6">
               
               {/* Header Info Bar */}
-              <div className="flex items-center justify-between bg-white px-5 py-3.5 rounded-2xl border border-light-beige shadow-xs text-xs">
+              <div className="hidden lg:flex items-center justify-between bg-white px-5 py-3.5 rounded-2xl border border-light-beige shadow-xs text-xs">
                 <div>
                   <span className="text-warm-gray font-light">Menampilkan </span>
                   <strong className="text-charcoal font-semibold">
@@ -341,7 +444,7 @@ function CatalogContent() {
 
               {/* Product Grid */}
               {loading ? (
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4 lg:gap-6">
                   {[...Array(6)].map((_, i) => (
                     <ProductCardSkeleton key={i} />
                   ))}
@@ -381,7 +484,7 @@ function CatalogContent() {
                   </button>
                 </div>
               ) : (
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4 lg:gap-6">
                   {products.map((product) => (
                     <ProductCard key={product.id} product={product} />
                   ))}

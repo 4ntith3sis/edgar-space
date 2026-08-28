@@ -58,7 +58,7 @@ export default function ProductCard({ product }) {
       </Link>
 
       {/* Product Details */}
-      <div className="flex flex-col flex-1 p-3.5 sm:p-4 justify-between bg-white">
+      <div className="flex flex-col flex-1 p-2.5 sm:p-3.5 lg:p-4 justify-between bg-white">
         <div>
           {category && (
             <span className="text-[10px] uppercase font-mono tracking-wider text-warm-gray block mb-1">

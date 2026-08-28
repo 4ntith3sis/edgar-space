@@ -56,8 +56,8 @@ export default function FeaturedProducts({ initialProducts = [] }) {
           </p>
         </div>
 
-        {/* 6 Product Cards Grid in 1 Row on Desktop */}
-        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-3 sm:gap-4 lg:gap-4">
+        {/* 6 Product Cards Grid - 2 cols mobile, 3 tablet, 6 desktop */}
+        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3 sm:gap-4">
           {displayProducts.map((product) => (
             <ProductCard key={product.id || product.slug} product={product} />
           ))}

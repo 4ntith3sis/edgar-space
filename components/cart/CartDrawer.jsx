@@ -83,8 +83,8 @@ export default function CartDrawer() {
         onClick={closeCart}
       />
 
-      <div className="fixed inset-y-0 right-0 max-w-full flex pl-6 sm:pl-10">
-        <div className="w-screen max-w-md bg-[#FAF8F5] border-l border-light-beige shadow-2xl flex flex-col justify-between">
+      <div className="fixed inset-y-0 right-0 max-w-full flex">
+        <div className="w-screen max-w-sm sm:max-w-md bg-[#FAF8F5] border-l border-light-beige shadow-2xl flex flex-col justify-between">
           
           {/* Header */}
           <div className="px-6 py-5 bg-white border-b border-light-beige flex items-center justify-between">
