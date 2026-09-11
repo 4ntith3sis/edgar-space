@@ -34,10 +34,6 @@ const nextConfig = {
         destination: '/produk',
       },
       {
-        source: '/uploads/:path*',
-        destination: 'http://localhost:5050/uploads/:path*',
-      },
-      {
         source: '/api/:path*',
         destination: 'http://localhost:5050/api/:path*',
       },

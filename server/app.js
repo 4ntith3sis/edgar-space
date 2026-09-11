@@ -2,7 +2,6 @@ const express = require('express');
 const cors = require('cors');
 const helmet = require('helmet');
 const cookieParser = require('cookie-parser');
-const path = require('path');
 
 const apiRoutes = require('./routes');
 const errorMiddleware = require('./middleware/errorMiddleware');
@@ -50,12 +49,6 @@ app.use(
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
-
-// Static Files - Uploads
-app.use(
-  '/uploads',
-  express.static(path.join(process.cwd(), 'public', 'uploads'))
-);
 
 // Mount API Routes
 app.use('/api', apiRoutes);
