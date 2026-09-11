@@ -29,6 +29,9 @@ supabase/migration-mapping.json
 # local database backups (business data exports)
 backups/
 
+# legacy database dump (contains credential material; history cleanup pending)
+edgar_space_backup.sql
+
 # vercel
 .vercel
 

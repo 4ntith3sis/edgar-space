@@ -2,7 +2,11 @@ const jwt = require('jsonwebtoken');
 const prisma = require('../config/db');
 const { sendError } = require('../utils/response');
 
-const JWT_SECRET = process.env.JWT_SECRET || 'edgar_space_secret_jwt_key_phase2_2026_super_secure';
+const JWT_SECRET = process.env.JWT_SECRET;
+
+if (!JWT_SECRET) {
+  throw new Error('JWT_SECRET environment variable is required');
+}
 
 /**
  * Middleware to protect admin routes
