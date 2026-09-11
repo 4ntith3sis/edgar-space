@@ -65,24 +65,7 @@ Terima kasih.
 
 ## ⚙️ Variabel Lingkungan (.env)
 
-```env
-# Server & Database
-PORT=5050
-DATABASE_URL="postgresql://username:password@localhost:5432/edgar_space?schema=public"
-JWT_SECRET="your-super-secret-jwt-key"
-NEXT_PUBLIC_API_URL="http://localhost:5050/api"
 
-# WhatsApp & Site URL
-NEXT_PUBLIC_SITE_URL="http://localhost:3000"
-NEXT_PUBLIC_WHATSAPP_NUMBER="6281234567890"
-
-# Admin Initial Credentials
-ADMIN_NAME="Admin Edgar Space"
-ADMIN_EMAIL="admin@edgarspace.id"
-ADMIN_PASSWORD="adminpassword123"
-```
-
----
 
 ## 🚀 Perintah Menjalankan & Verifikasi
 
