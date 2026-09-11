@@ -43,7 +43,7 @@ export default function CategoryCard({ category }) {
       <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent transition-opacity" />
       
       {/* Category Name in White */}
-      <div className="absolute bottom-0 inset-x-0 p-3 sm:p-4 text-center">
+      <div className="absolute bottom-0 inset-x-0 p-3 sm:p-4 text-center transition-transform duration-300 group-hover:-translate-y-1">
         <h3 className="font-sans text-xs sm:text-sm font-semibold text-white tracking-wide leading-snug drop-shadow-sm">
           {name}
         </h3>

@@ -4,6 +4,7 @@ import React from 'react';
 import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
 import CartDrawer from '@/components/cart/CartDrawer';
+import PageTransition from '@/components/ui/PageTransition';
 import { CartProvider } from '@/context/CartContext';
 
 export default function ShopLayout({ children }) {
@@ -11,7 +12,7 @@ export default function ShopLayout({ children }) {
     <CartProvider>
       <Header />
       <main className="flex-grow">
-        {children}
+        <PageTransition>{children}</PageTransition>
       </main>
       <CartDrawer />
       <Footer />

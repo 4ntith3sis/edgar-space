@@ -3,6 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import Container from '@/components/ui/Container';
 import ProductCard from '@/components/product/ProductCard';
+import Reveal from '@/components/ui/Reveal';
 import { fetchApi } from '@/libs/api';
 
 const REFERENCE_PRODUCTS = [
@@ -47,19 +48,23 @@ export default function FeaturedProducts({ initialProducts = [] }) {
   return (
     <section id="produk" aria-label="Produk Pilihan" className="bg-warm-ivory py-12 sm:py-16">
       <Container>
-        <div className="text-center max-w-2xl mx-auto mb-8 sm:mb-12">
-          <h2 className="font-sans text-2xl sm:text-3xl text-charcoal font-bold tracking-tight mb-2">
-            Produk Pilihan
-          </h2>
-          <p className="text-xs sm:text-sm text-warm-gray font-sans font-light leading-relaxed">
-            Modern furniture and home accessories to make your home more decorative.
-          </p>
-        </div>
+        <Reveal>
+          <div className="text-center max-w-2xl mx-auto mb-8 sm:mb-12">
+            <h2 className="font-sans text-2xl sm:text-3xl text-charcoal font-bold tracking-tight mb-2">
+              Produk Pilihan
+            </h2>
+            <p className="text-xs sm:text-sm text-warm-gray font-sans font-light leading-relaxed">
+              Modern furniture and home accessories to make your home more decorative.
+            </p>
+          </div>
+        </Reveal>
 
         {/* 6 Product Cards Grid - 2 cols mobile, 3 tablet, 6 desktop */}
         <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3 sm:gap-4">
-          {displayProducts.map((product) => (
-            <ProductCard key={product.id || product.slug} product={product} />
+          {displayProducts.map((product, index) => (
+            <Reveal key={product.id || product.slug} delay={Math.min(index, 5)}>
+              <ProductCard product={product} />
+            </Reveal>
           ))}
         </div>
       </Container>

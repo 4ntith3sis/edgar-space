@@ -77,7 +77,7 @@ export default function Footer() {
                   <li key={link.name}>
                     <Link
                       href={link.href}
-                      className="text-warm-gray hover:text-deep-olive font-light transition-colors"
+                      className="footer-link text-warm-gray hover:text-deep-olive font-light transition-colors"
                     >
                       {link.name}
                     </Link>
@@ -96,7 +96,7 @@ export default function Footer() {
                   <li key={link.name}>
                     <Link
                       href={link.href}
-                      className="text-warm-gray hover:text-deep-olive font-light transition-colors"
+                      className="footer-link text-warm-gray hover:text-deep-olive font-light transition-colors"
                     >
                       {link.name}
                     </Link>
@@ -115,7 +115,7 @@ export default function Footer() {
                   <li key={link.name}>
                     <Link
                       href={link.href}
-                      className="text-warm-gray hover:text-deep-olive font-light transition-colors"
+                      className="footer-link text-warm-gray hover:text-deep-olive font-light transition-colors"
                     >
                       {link.name}
                     </Link>

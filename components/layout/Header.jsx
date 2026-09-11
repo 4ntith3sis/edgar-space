@@ -41,7 +41,7 @@ export default function Header() {
   const [showMobileSearch, setShowMobileSearch] = useState(false);
 
   return (
-    <header className="sticky top-0 z-40 w-full transition-all duration-300">
+    <header className="header-load sticky top-0 z-40 w-full transition-all duration-300">
       {/* Top Announcement Bar */}
       <AnnouncementBar />
 
@@ -64,7 +64,7 @@ export default function Header() {
             </div>
 
             {/* Brand Logo */}
-            <div className="flex-1 lg:flex-none text-center lg:text-left">
+            <div className="header-load header-load-d1 flex-1 lg:flex-none text-center lg:text-left">
               <Link href="/" className="inline-block group">
                 <span className="font-sans text-lg sm:text-2xl tracking-[0.12em] text-charcoal font-bold transition-colors group-hover:text-deep-olive uppercase">
                   {SITE_NAME}
@@ -73,7 +73,7 @@ export default function Header() {
             </div>
 
             {/* Desktop Navigation Menu */}
-            <nav aria-label="Navigasi Utama" className="hidden lg:flex items-center space-x-9">
+            <nav aria-label="Navigasi Utama" className="header-load header-load-d2 hidden lg:flex items-center space-x-9">
               {navigationLinks.map((link) => {
                 const isKoleksi = link.name === 'Koleksi' || link.href === '/produk' || link.href === '/koleksi';
                 const isKoleksiActive = isKoleksi && (pathname.startsWith('/produk') || pathname.startsWith('/koleksi'));
@@ -85,7 +85,7 @@ export default function Header() {
                   <Link
                     key={link.name}
                     href={link.href}
-                    className={`font-sans text-xs sm:text-sm tracking-wide transition-colors py-1 relative ${
+                    className={`nav-link font-sans text-xs sm:text-sm tracking-wide transition-colors py-1 relative ${
                       isActive
                         ? 'font-bold text-terracotta'
                         : 'font-medium text-charcoal/80 hover:text-deep-olive'

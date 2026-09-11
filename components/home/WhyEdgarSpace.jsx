@@ -1,5 +1,6 @@
 import React from 'react';
 import Container from '@/components/ui/Container';
+import Reveal from '@/components/ui/Reveal';
 
 export default function WhyEdgarSpace() {
   const benefits = [
@@ -23,21 +24,23 @@ export default function WhyEdgarSpace() {
   return (
     <section aria-label="Keunggulan Edgar Space" className="bg-warm-ivory py-12 sm:py-20 lg:py-28">
       <Container>
-        <div className="text-center max-w-2xl mx-auto mb-8 sm:mb-16 lg:mb-20">
-          <span className="text-xs font-sans font-semibold tracking-widest text-deep-olive uppercase block mb-3">
-            Nilai Pembeda
-          </span>
-          <h2 className="font-sans text-2xl sm:text-3xl text-charcoal font-bold tracking-tight">
-            Mengapa Pilih Edgar Space?
-          </h2>
-        </div>
+        <Reveal>
+          <div className="text-center max-w-2xl mx-auto mb-8 sm:mb-16 lg:mb-20">
+            <span className="text-xs font-sans font-semibold tracking-widest text-deep-olive uppercase block mb-3">
+              Nilai Pembeda
+            </span>
+            <h2 className="font-sans text-2xl sm:text-3xl text-charcoal font-bold tracking-tight">
+              Mengapa Pilih Edgar Space?
+            </h2>
+          </div>
+        </Reveal>
 
         {/* 3 Columns Editorial Layout with Number Badges & Whitespace */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8 lg:gap-12">
           {benefits.map((item, index) => (
+            <Reveal key={index} delay={index}>
             <div
-              key={index}
-              className="bg-white/60 p-5 sm:p-8 lg:p-10 rounded-2xl border border-light-beige flex flex-col justify-between transition-all duration-300 hover:bg-white hover:shadow-subtle hover:border-deep-olive/30"
+              className="bg-white/60 p-5 sm:p-8 lg:p-10 rounded-2xl border border-light-beige flex flex-col justify-between transition-all duration-300 hover:bg-white hover:shadow-subtle hover:border-deep-olive/30 h-full"
             >
               <div>
                 <div className="flex items-center justify-between mb-8">
@@ -56,6 +59,7 @@ export default function WhyEdgarSpace() {
                 </p>
               </div>
             </div>
+            </Reveal>
           ))}
         </div>
       </Container>
