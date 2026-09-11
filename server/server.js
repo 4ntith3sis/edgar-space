@@ -1,4 +1,14 @@
-require('dotenv').config();
+require('./utils/loadEnv').loadEnv();
+const { validateServerEnv } = require('./utils/validateEnv');
+
+// Fail fast with a value-free message (names only, never secrets).
+try {
+  validateServerEnv();
+} catch (err) {
+  console.error(`[EDGAR SPACE SERVER] ${err.message}`);
+  process.exit(1);
+}
+
 const app = require('./app');
 
 const PORT = process.env.PORT || 5050;

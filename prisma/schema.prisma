@@ -25,6 +25,11 @@ model Category {
   slug        String    @unique
   description String?
   thumbnail   String?
+  // Supabase image metadata (backward-compatible, nullable).
+  // imageSource: 'upload' | 'ai' | 'unsplash' | 'external' | null
+  // storagePath: "<bucket>/<path>" e.g. "categories/3/thumb.webp", null when not in Supabase Storage
+  imageSource String?
+  storagePath String?
   createdAt   DateTime  @default(now())
   updatedAt   DateTime  @updatedAt
   products    Product[]
@@ -41,6 +46,11 @@ model Product {
   price          Decimal         @db.Decimal(12, 2)
   stock          Int             @default(0)
   thumbnail      String?
+  // Supabase image metadata (backward-compatible, nullable).
+  // imageSource: 'upload' | 'ai' | 'unsplash' | 'external' | null
+  // storagePath: "<bucket>/<path>" e.g. "products/12/thumb.webp", null when not in Supabase Storage
+  imageSource    String?
+  storagePath    String?
   isFeatured     Boolean         @default(false)
   categoryId     Int
   createdAt      DateTime        @default(now())

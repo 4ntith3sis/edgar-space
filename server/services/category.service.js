@@ -20,6 +20,8 @@ async function getAllCategories() {
     slug: cat.slug,
     description: cat.description,
     thumbnail: cat.thumbnail,
+    imageSource: cat.imageSource || null,
+    storagePath: cat.storagePath || null,
     productCount: cat._count.products,
     createdAt: cat.createdAt,
     updatedAt: cat.updatedAt
@@ -133,6 +135,8 @@ async function getCategoryBySlug(slug, options = {}) {
     slug: category.slug,
     description: category.description,
     thumbnail: category.thumbnail,
+    imageSource: category.imageSource || null,
+    storagePath: category.storagePath || null,
     productCount: category._count.products,
     createdAt: category.createdAt,
     updatedAt: category.updatedAt,
@@ -174,7 +178,7 @@ async function getCategoryById(id) {
 
 /**
  * Create a new category
- * @param {{ name: string, description?: string, thumbnail?: string }} data 
+ * @param {{ name: string, description?: string, thumbnail?: string, imageSource?: string|null, storagePath?: string|null }} data 
  */
 async function createCategory(data) {
   if (!data.name || !data.name.trim()) {
@@ -190,7 +194,9 @@ async function createCategory(data) {
       name: data.name.trim(),
       slug,
       description: data.description ? data.description.trim() : null,
-      thumbnail: data.thumbnail || null
+      thumbnail: data.thumbnail || null,
+      imageSource: data.imageSource !== undefined ? data.imageSource : null,
+      storagePath: data.storagePath !== undefined ? data.storagePath : null
     }
   });
 }
@@ -198,7 +204,7 @@ async function createCategory(data) {
 /**
  * Update an existing category
  * @param {number} id 
- * @param {{ name?: string, description?: string, thumbnail?: string }} data 
+ * @param {{ name?: string, description?: string, thumbnail?: string, imageSource?: string|null, storagePath?: string|null }} data 
  */
 async function updateCategory(id, data) {
   const categoryId = Number(id);
@@ -225,6 +231,14 @@ async function updateCategory(id, data) {
 
   if (data.thumbnail !== undefined) {
     updateData.thumbnail = data.thumbnail || null;
+  }
+
+  if (data.imageSource !== undefined) {
+    updateData.imageSource = data.imageSource;
+  }
+
+  if (data.storagePath !== undefined) {
+    updateData.storagePath = data.storagePath;
   }
 
   return await prisma.category.update({

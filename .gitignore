@@ -18,9 +18,16 @@ npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 
-# local env files
-.env*.local
+# local env files (secrets — never commit)
 .env
+.env.*
+!.env.example
+
+# generated migration artifacts (may contain local paths; regenerated anytime)
+supabase/migration-mapping.json
+
+# local database backups (business data exports)
+backups/
 
 # vercel
 .vercel

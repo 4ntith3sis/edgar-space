@@ -115,6 +115,8 @@ async function getAllProducts(filters = {}) {
     price: Number(prod.price),
     stock: prod.stock,
     thumbnail: prod.thumbnail,
+    imageSource: prod.imageSource || null,
+    storagePath: prod.storagePath || null,
     images: prod.images && prod.images.length > 0 ? prod.images : (prod.thumbnail ? [prod.thumbnail] : []),
     isFeatured: prod.isFeatured,
     categoryId: prod.categoryId,
@@ -196,6 +198,8 @@ async function getProductBySlug(slug) {
     price: Number(product.price),
     stock: product.stock,
     thumbnail: product.thumbnail,
+    imageSource: product.imageSource || null,
+    storagePath: product.storagePath || null,
     images: galleryImages,
     isFeatured: product.isFeatured,
     categoryId: product.categoryId,
@@ -252,7 +256,7 @@ async function getProductById(id) {
 
 /**
  * Create a new product with initial stock movement transaction
- * @param {{ name: string, description?: string, price: number, stock?: number, categoryId: number, thumbnail?: string, isFeatured?: boolean }} data 
+ * @param {{ name: string, description?: string, price: number, stock?: number, categoryId: number, thumbnail?: string, imageSource?: string|null, storagePath?: string|null, isFeatured?: boolean }} data 
  * @param {number} adminId 
  */
 async function createProduct(data, adminId) {
@@ -305,6 +309,8 @@ async function createProduct(data, adminId) {
         price: priceNum,
         stock: stockNum,
         thumbnail: data.thumbnail || null,
+        imageSource: data.imageSource !== undefined ? data.imageSource : null,
+        storagePath: data.storagePath !== undefined ? data.storagePath : null,
         images: data.thumbnail ? [data.thumbnail] : [],
         isFeatured: data.isFeatured === true || data.isFeatured === 'true',
         categoryId
@@ -340,7 +346,7 @@ async function createProduct(data, adminId) {
 /**
  * Update product info (Stock is NOT updated here!)
  * @param {number} id 
- * @param {{ name?: string, description?: string, price?: number, categoryId?: number, thumbnail?: string, isFeatured?: boolean }} data 
+ * @param {{ name?: string, description?: string, price?: number, categoryId?: number, thumbnail?: string, imageSource?: string|null, storagePath?: string|null, isFeatured?: boolean }} data 
  */
 async function updateProduct(id, data) {
   const productId = Number(id);
@@ -393,6 +399,14 @@ async function updateProduct(id, data) {
     if (data.thumbnail) {
       updateData.images = [data.thumbnail];
     }
+  }
+
+  if (data.imageSource !== undefined) {
+    updateData.imageSource = data.imageSource;
+  }
+
+  if (data.storagePath !== undefined) {
+    updateData.storagePath = data.storagePath;
   }
 
   if (data.isFeatured !== undefined) {

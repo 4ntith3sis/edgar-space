@@ -21,14 +21,28 @@ router.use(authMiddleware);
 // --- Admin Auth Me ---
 router.get('/me', authController.getMe);
 
-// --- Admin Image Upload ---
-router.post('/upload', upload.single('file'), (req, res) => {
-  if (!req.file) {
-    return sendError(res, 'File gambar tidak ditemukan.', 400);
+// --- Admin Image Upload (Supabase Storage, Vercel-safe, no local filesystem) ---
+router.post('/upload', upload.single('file'), async (req, res, next) => {
+  try {
+    if (!req.file) {
+      return sendError(res, 'File gambar tidak ditemukan.', 400);
+    }
+    const folder =
+      req.query.folder || req.body.folder ||
+      (req.baseUrl.includes('categories') || req.path.includes('categories') ? 'categories' : 'products');
+    // entityId optional (?entityId=12) so object lands in "<bucket>/<id>/..." directly.
+    // Without it, file goes to "<bucket>/tmp/..." and is relocated on create.
+    const entityId = req.query.entityId || req.body.entityId || null;
+    const { uploadImageToStorage } = require('../utils/storage');
+    const uploaded = await uploadImageToStorage(req.file, { bucket: folder, entityId });
+    return sendSuccess(
+      res,
+      { url: uploaded.url, storagePath: uploaded.storagePath, source: uploaded.source },
+      'Gambar berhasil diunggah.'
+    );
+  } catch (error) {
+    next(error);
   }
-  const folder = req.baseUrl.includes('categories') || req.path.includes('categories') ? 'categories' : 'products';
-  const relativePath = `/uploads/${folder}/${req.file.filename}`;
-  return sendSuccess(res, { url: relativePath, filename: req.file.filename }, 'Gambar berhasil diunggah.');
 });
 
 // --- Admin Dashboard ---

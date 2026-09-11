@@ -2,7 +2,7 @@ const { PrismaClient } = require('@prisma/client');
 const bcrypt = require('bcryptjs');
 const { categories } = require('../data/categories');
 const { products } = require('../data/products');
-require('dotenv').config();
+require('../server/utils/loadEnv').loadEnv();
 
 const prisma = new PrismaClient();
 
@@ -34,18 +34,30 @@ async function main() {
   const categoryMap = new Map();
 
   for (const cat of categories) {
+    // Seed image metadata: Unsplash URLs stay as Unsplash (never re-uploaded).
+    const thumbSource = !cat.thumbnail
+      ? null
+      : cat.thumbnail.includes('images.unsplash.com')
+        ? 'unsplash'
+        : cat.thumbnail.startsWith('http')
+          ? 'external'
+          : null;
     const category = await prisma.category.upsert({
       where: { slug: cat.slug },
       update: {
         name: cat.name,
         description: cat.description || null,
-        thumbnail: cat.thumbnail || null
+        thumbnail: cat.thumbnail || null,
+        imageSource: thumbSource,
+        storagePath: null
       },
       create: {
         name: cat.name,
         slug: cat.slug,
         description: cat.description || null,
-        thumbnail: cat.thumbnail || null
+        thumbnail: cat.thumbnail || null,
+        imageSource: thumbSource,
+        storagePath: null
       }
     });
     categoryMap.set(cat.slug, category);
@@ -67,6 +79,13 @@ async function main() {
     });
 
     if (!existingProduct) {
+      const prodSource = !prod.thumbnail
+        ? null
+        : prod.thumbnail.includes('images.unsplash.com')
+          ? 'unsplash'
+          : prod.thumbnail.startsWith('http')
+            ? 'external'
+            : null;
       const createdProduct = await prisma.product.create({
         data: {
           name: prod.name,
@@ -75,6 +94,8 @@ async function main() {
           price: prod.price,
           stock: prod.stock,
           thumbnail: prod.thumbnail || null,
+          imageSource: prodSource,
+          storagePath: null,
           isFeatured: Boolean(prod.isFeatured),
           categoryId: category.id
         }
@@ -96,14 +117,27 @@ async function main() {
       }
       seededProductsCount++;
     } else {
-      // Update existing product details without altering stock
+      // Update existing product details without altering stock.
+      // Never overwrite a Supabase Storage reference with seed data when the
+      // record already points to Storage (protects migrated/admin uploads).
+      const seedSource = !prod.thumbnail
+        ? null
+        : prod.thumbnail.includes('images.unsplash.com')
+          ? 'unsplash'
+          : prod.thumbnail.startsWith('http')
+            ? 'external'
+            : null;
+      const keepExistingImage =
+        existingProduct.storagePath || existingProduct.imageSource === 'upload' || existingProduct.imageSource === 'ai';
       await prisma.product.update({
         where: { id: existingProduct.id },
         data: {
           name: prod.name,
           description: prod.description || null,
           price: prod.price,
-          thumbnail: prod.thumbnail || null,
+          ...(keepExistingImage
+            ? {}
+            : { thumbnail: prod.thumbnail || null, imageSource: seedSource, storagePath: null }),
           isFeatured: Boolean(prod.isFeatured),
           categoryId: category.id
         }

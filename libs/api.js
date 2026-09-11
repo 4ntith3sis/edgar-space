@@ -64,10 +64,15 @@ export async function fetchApi(endpoint, options = {}) {
 }
 
 /**
- * Helper to resolve image URLs
- * @param {string} path
- * @param {string} [slug]
- * @returns {string}
+ * Helper to resolve image URLs — DATABASE FIRST.
+ * Priority:
+ *  1. image_url from Supabase database (Supabase Storage public URL,
+ *     Unsplash URL, or any external URL) — returned as-is
+ *  2. legacy local "/uploads/..." path (backward compat during migration)
+ *  3. static local fallback "/images/products/<slug>.svg"
+ *  4. global placeholder "/images/placeholder.svg"
+ *
+ * New uploads NEVER produce "/uploads/..." — they return Supabase Storage URLs.
  */
 export function getImageUrl(path, slug) {
   if (!path || path === 'null' || path === 'undefined') {
@@ -75,12 +80,12 @@ export function getImageUrl(path, slug) {
     return '/images/placeholder.svg';
   }
 
-  // URL eksternal langsung digunakan
+  // URL database langsung digunakan (Supabase Storage / Unsplash / eksternal)
   if (path.startsWith('http://') || path.startsWith('https://')) {
     return path;
   }
 
-  // File upload menggunakan URL relatif dari domain website
+  // Legacy local upload (masa transisi migrasi ke Supabase Storage)
   if (path.startsWith('/uploads/')) {
     return path;
   }
