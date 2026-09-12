@@ -165,20 +165,25 @@ export default function KeranjangPage() {
 
                   <div className="divide-y divide-light-beige space-y-4 pt-1">
                     {cartItems.map((item) => {
-                      const imageSrc = getImageUrl(item.thumbnail);
+                      const rawItemImage = item.thumbnail || item.image_url || item.image || (Array.isArray(item.images) && item.images[0]) || '';
+                      const imageSrc = getImageUrl(rawItemImage, item.slug);
                       return (
                         <div
                           key={item.id}
                           className="pt-4 first:pt-0 flex items-center space-x-4"
                         >
-                          <div className="relative w-20 h-20 rounded-2xl overflow-hidden bg-soft-beige shrink-0 border border-light-beige">
-                            <Image
-                              src={imageSrc || 'https://images.unsplash.com/photo-1612196808214-b7e239e5f6b7?auto=format&fit=crop&w=200&q=80'}
-                              alt={item.name}
-                              fill
-                              className="object-cover"
-                              sizes="80px"
-                            />
+                          <div className="relative w-20 h-20 rounded-2xl overflow-hidden bg-soft-beige shrink-0 border border-light-beige flex items-center justify-center">
+                            {imageSrc ? (
+                              <Image
+                                src={imageSrc}
+                                alt={item.name}
+                                fill
+                                className="object-cover"
+                                sizes="80px"
+                              />
+                            ) : (
+                              <ShoppingBag className="w-8 h-8 text-warm-gray opacity-50" />
+                            )}
                           </div>
 
                           <div className="flex-1 min-w-0">

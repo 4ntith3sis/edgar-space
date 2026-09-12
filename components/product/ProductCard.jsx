@@ -1,6 +1,6 @@
 'use client';
 
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { ShoppingCart } from 'lucide-react';
@@ -10,19 +10,31 @@ import { useCart } from '@/context/CartContext';
 
 export default function ProductCard({ product }) {
   const { addToCart } = useCart();
-  if (!product) return null;
-  const { 
-    name = 'Produk', 
-    slug = '', 
-    price = 0, 
-    stock = 10,
-    category = '',
-    thumbnail = ''
-  } = product;
-  
-  const photoUrl = getImageUrl(thumbnail, slug);
-  const productUrl = `/produk/${slug}`;
 
+  const name = product?.name || 'Produk';
+  const slug = product?.slug || '';
+  const price = product?.price || 0;
+  const stock = product?.stock !== undefined ? product.stock : 10;
+  const category = product?.category || '';
+
+  // Support multiple potential image properties from backend / Prisma / static objects
+  const rawImagePath = product?.thumbnail || product?.image_url || product?.image || (Array.isArray(product?.images) && product?.images[0]) || '';
+  const resolvedUrl = getImageUrl(rawImagePath);
+
+  const [imgSrc, setImgSrc] = useState(resolvedUrl || '');
+  const [imageLoading, setImageLoading] = useState(Boolean(resolvedUrl));
+  const [hasError, setHasError] = useState(false);
+
+  useEffect(() => {
+    const nextUrl = getImageUrl(rawImagePath) || '';
+    setImgSrc(nextUrl);
+    setImageLoading(Boolean(nextUrl));
+    setHasError(false);
+  }, [rawImagePath]);
+
+  if (!product) return null;
+
+  const productUrl = `/produk/${slug}`;
   const isOutOfStock = stock <= 0;
   const isLowStock = stock > 0 && stock <= 5;
 
@@ -31,6 +43,11 @@ export default function ProductCard({ product }) {
     e.stopPropagation();
     if (isOutOfStock) return;
     addToCart(product, 1);
+  };
+
+  const handleImageError = () => {
+    setHasError(true);
+    setImageLoading(false);
   };
 
   return (
@@ -48,13 +65,26 @@ export default function ProductCard({ product }) {
 
       {/* Image Container */}
       <Link href={productUrl} className="relative aspect-square w-full bg-soft-beige/40 overflow-hidden p-2 flex items-center justify-center cursor-pointer">
-        <Image
-          src={photoUrl}
-          alt={name}
-          fill
-          className={`object-cover transition-transform duration-500 group-hover:scale-105 ${isOutOfStock ? 'grayscale opacity-75' : ''}`}
-          sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 25vw"
-        />
+        {/* Skeleton Shimmer while loading or if no image */}
+        {(imageLoading || !imgSrc || hasError) && (
+          <div className="absolute inset-0 bg-soft-beige/70 animate-pulse z-0 flex items-center justify-center text-warm-gray text-xs font-mono">
+            {name}
+          </div>
+        )}
+
+        {imgSrc && !hasError && (
+          <Image
+            src={imgSrc}
+            alt={name}
+            fill
+            onLoad={() => setImageLoading(false)}
+            onError={handleImageError}
+            className={`object-cover transition-all duration-500 group-hover:scale-105 ${
+              imageLoading ? 'opacity-0 scale-95' : 'opacity-100 scale-100'
+            } ${isOutOfStock ? 'grayscale opacity-75' : ''}`}
+            sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 25vw"
+          />
+        )}
       </Link>
 
       {/* Product Details */}
@@ -96,3 +126,4 @@ export default function ProductCard({ product }) {
     </article>
   );
 }
+

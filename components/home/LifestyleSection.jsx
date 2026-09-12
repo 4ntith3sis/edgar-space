@@ -11,7 +11,7 @@ export default function LifestyleSection() {
           <div className="lg:col-span-7 order-2 lg:order-1">
             <div className="relative aspect-[16/11] w-full rounded-card overflow-hidden border border-light-taupe shadow-subtle bg-surface-white">
               <Image
-                src="/images/lifestyle/lifestyle-main.svg"
+                src="https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?auto=format&fit=crop&w=1200&q=80"
                 alt="Aksesori dan dekorasi kehidupan sehari-hari Edgar Space"
                 fill
                 className="object-cover"

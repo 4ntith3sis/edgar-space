@@ -115,11 +115,11 @@ export default function ProductDetailPage() {
   // Handle gallery images
   const images = product.images && product.images.length > 0
     ? product.images
-    : product.thumbnail
-    ? [product.thumbnail]
-    : [`/images/products/${product.slug}.svg`];
+    : product.thumbnail || product.image_url || product.image
+    ? [product.thumbnail || product.image_url || product.image]
+    : [];
 
-  const mainImageSrc = getImageUrl(images[selectedImageIndex] || images[0], product.slug);
+  const mainImageSrc = getImageUrl(images[selectedImageIndex] || images[0]);
 
   // Stock calculations
   const availableStock = product.stock || 0;

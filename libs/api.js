@@ -64,31 +64,39 @@ export async function fetchApi(endpoint, options = {}) {
 }
 
 /**
- * Helper to resolve image URLs — DATABASE FIRST.
+ * Helper to resolve image URLs — SUPABASE STORAGE FIRST.
  * Priority:
  *  1. image_url from Supabase database (Supabase Storage public URL,
  *     Unsplash URL, or any external URL) — returned as-is
- *  2. legacy local "/uploads/..." path (backward compat during migration)
- *  3. static local fallback "/images/products/<slug>.svg"
- *  4. global placeholder "/images/placeholder.svg"
- *
- * New uploads NEVER produce "/uploads/..." — they return Supabase Storage URLs.
+ *  2. legacy upload paths starting with "/uploads/..."
+ *  3. returns empty string if path is null/undefined/empty
  */
-export function getImageUrl(path, slug) {
-  if (!path || path === 'null' || path === 'undefined') {
-    if (slug) return `/images/products/${slug}.svg`;
-    return '/images/placeholder.svg';
+export function getImageUrl(path) {
+  if (typeof path !== 'string' || !path.trim() || path === 'null' || path === 'undefined') {
+    return '';
+  }
+
+  const cleanPath = path.trim();
+
+  if (cleanPath === 'null' || cleanPath === 'undefined' || !cleanPath) {
+    return '';
   }
 
   // URL database langsung digunakan (Supabase Storage / Unsplash / eksternal)
-  if (path.startsWith('http://') || path.startsWith('https://')) {
-    return path;
+  if (cleanPath.startsWith('http://') || cleanPath.startsWith('https://')) {
+    return cleanPath;
   }
 
-  // Legacy local upload (masa transisi migrasi ke Supabase Storage)
-  if (path.startsWith('/uploads/')) {
-    return path;
+  // Legacy upload path
+  if (cleanPath.startsWith('/uploads/')) {
+    return cleanPath;
   }
 
-  return path;
+  // Local absolute paths
+  if (cleanPath.startsWith('/')) {
+    return cleanPath;
+  }
+
+  return cleanPath;
 }
+

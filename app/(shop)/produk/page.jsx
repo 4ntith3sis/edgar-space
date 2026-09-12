@@ -164,7 +164,7 @@ function CatalogContent() {
               {activeCategoryObj.thumbnail && (
                 <div className="absolute inset-0 opacity-30">
                   <Image
-                    src={getImageUrl(activeCategoryObj.thumbnail)}
+                    src={getImageUrl(activeCategoryObj.thumbnail, activeCategoryObj.slug)}
                     alt={activeCategoryObj.name}
                     fill
                     className="object-cover"

@@ -1,8 +1,0 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="800" height="800" viewBox="0 0 800 800" fill="none">
-  <rect width="800" height="800" fill="#F7F5F0"/>
-  <rect x="200" y="200" width="400" height="400" rx="32" fill="#EDE9E1" stroke="#DDD8CF" stroke-width="4"/>
-  <path d="M340 460L390 400L430 440L470 380L520 460H340Z" fill="#B77B61" opacity="0.6"/>
-  <circle cx="360" cy="320" r="30" fill="#4E5745" opacity="0.5"/>
-  <text x="400" y="550" text-anchor="middle" fill="#6F6B64" font-family="sans-serif" font-size="22" font-weight="500">EDGAR SPACE</text>
-  <text x="400" y="580" text-anchor="middle" fill="#A8A49C" font-family="sans-serif" font-size="16">Gambar tidak tersedia</text>
-</svg>

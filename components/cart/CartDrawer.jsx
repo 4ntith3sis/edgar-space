@@ -130,21 +130,26 @@ export default function CartDrawer() {
               </div>
             ) : (
               cartItems.map((item) => {
-                const imageSrc = getImageUrl(item.thumbnail);
+                const rawItemImage = item.thumbnail || item.image_url || item.image || (Array.isArray(item.images) && item.images[0]) || '';
+                const imageSrc = getImageUrl(rawItemImage, item.slug);
                 return (
                   <div
                     key={item.id}
                     className="bg-white p-3.5 rounded-2xl border border-light-beige flex items-center space-x-4 shadow-xs"
                   >
                     {/* Item Image */}
-                    <div className="relative w-16 h-16 rounded-xl overflow-hidden bg-soft-beige shrink-0 border border-light-beige">
-                      <Image
-                        src={imageSrc || 'https://images.unsplash.com/photo-1612196808214-b7e239e5f6b7?auto=format&fit=crop&w=200&q=80'}
-                        alt={item.name}
-                        fill
-                        className="object-cover"
-                        sizes="64px"
-                      />
+                    <div className="relative w-16 h-16 rounded-xl overflow-hidden bg-soft-beige shrink-0 border border-light-beige flex items-center justify-center">
+                      {imageSrc ? (
+                        <Image
+                          src={imageSrc}
+                          alt={item.name}
+                          fill
+                          className="object-cover"
+                          sizes="64px"
+                        />
+                      ) : (
+                        <ShoppingBag className="w-6 h-6 text-warm-gray opacity-50" />
+                      )}
                     </div>
 
                     {/* Item Info */}

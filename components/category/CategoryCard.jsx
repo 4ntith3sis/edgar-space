@@ -1,6 +1,6 @@
 'use client';
 
-import React from 'react';
+import React, { useState } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import { getImageUrl } from '@/libs/api';
@@ -16,26 +16,46 @@ const slugToPhotoMap = {
 };
 
 export default function CategoryCard({ category }) {
-  if (!category) return null;
-  const { name, slug, thumbnail } = category;
+  const name = category?.name;
+  const slug = category?.slug;
+  const thumbnail = category?.thumbnail;
 
   const resolvedApiImage = getImageUrl(thumbnail);
   const isCustomThumbnail = thumbnail && thumbnail !== 'null' && thumbnail !== 'undefined';
   const fallbackPhoto = slugToPhotoMap[slug] || `https://images.unsplash.com/photo-1513519245088-0e12902e5a38?auto=format&fit=crop&w=600&q=80`;
 
-  const photoUrl = isCustomThumbnail ? resolvedApiImage : fallbackPhoto;
+  const initialPhotoUrl = (isCustomThumbnail ? resolvedApiImage : fallbackPhoto) || fallbackPhoto;
+
+  const [imgSrc, setImgSrc] = useState(initialPhotoUrl);
+  const [imageLoading, setImageLoading] = useState(true);
+
+  if (!category) return null;
+
   const targetUrl = `/produk?kategori=${slug || ''}`;
+
+  const handleImageError = () => {
+    setImgSrc(fallbackPhoto);
+    setImageLoading(false);
+  };
 
   return (
     <Link
       href={targetUrl}
       className="group relative block aspect-[3/4.8] w-full rounded-2xl overflow-hidden border border-light-beige shadow-subtle bg-soft-beige transition-all duration-300 hover:shadow-hover hover:-translate-y-1"
     >
+      {imageLoading && (
+        <div className="absolute inset-0 bg-soft-beige/70 animate-pulse z-0" />
+      )}
+
       <Image
-        src={photoUrl}
+        src={imgSrc}
         alt={name || 'Kategori'}
         fill
-        className="object-cover transition-transform duration-500 group-hover:scale-105"
+        onLoad={() => setImageLoading(false)}
+        onError={handleImageError}
+        className={`object-cover transition-transform duration-500 group-hover:scale-105 ${
+          imageLoading ? 'opacity-0 scale-95' : 'opacity-100 scale-100'
+        }`}
         sizes="(max-width: 640px) 50vw, (max-width: 1024px) 25vw, 15vw"
       />
       
@@ -51,5 +71,6 @@ export default function CategoryCard({ category }) {
     </Link>
   );
 }
+
 
 
